@@ -547,7 +547,7 @@ mod tests {
     fn a_cost_inside_every_limit_violates_nothing() {
         let guard = BudgetGuard::new("transfer")
             .cpu_ceiling(1_000)
-            .mem_ceiling(500)
+            .mem_max(500)
             .baseline(Some(cost(1_000, 500)))
             .tolerance_percent(10);
 
@@ -571,7 +571,7 @@ mod tests {
     fn every_breach_is_reported_in_one_pass() {
         let violations = BudgetGuard::new("transfer")
             .cpu_ceiling(1_000)
-            .mem_ceiling(500)
+            .mem_max(500)
             .baseline(Some(cost(100, 100)))
             .tolerance_percent(0)
             .violations(&cost(2_000, 600));
@@ -859,7 +859,7 @@ mod tests {
 
         BudgetGuard::new("bump")
             .cpu_ceiling(50_000_000)
-            .mem_ceiling(50_000_000)
+            .mem_max(50_000_000)
             .run(&env, || client.bump());
     }
 
