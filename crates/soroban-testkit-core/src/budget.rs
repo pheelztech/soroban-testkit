@@ -286,9 +286,19 @@ impl BudgetGuard {
 
         // Enforce custom resource limits if set.
         if self.cpu_ceiling.is_some() || self.mem_ceiling.is_some() {
-            let limit = soroban_env_host::InvocationResourceLimits::new()
-                .max_instructions(self.cpu_ceiling.unwrap_or(0))
-                .max_bytes(self.mem_ceiling.unwrap_or(0));
+            let limit = soroban_env_host::InvocationResourceLimits {
+            instructions: self.cpu_ceiling.unwrap_or(0) as i64,
+            mem_bytes: self.mem_ceiling.unwrap_or(0) as i64,
+            disk_read_entries: 0,
+            write_entries: 0,
+            ledger_entries: 0,
+            disk_read_bytes: 0,
+            write_bytes: 0,
+            contract_events_size_bytes: 0,
+            max_contract_data_key_size_bytes: 0,
+            max_contract_data_entry_size_bytes: 0,
+            max_contract_code_entry_size_bytes: 0,
+        };
             env.cost_estimate().enforce_resource_limits(limit);
         }
 
